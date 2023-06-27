@@ -1,3 +1,5 @@
+from typing import List, Optional
+
 from fastapi import FastAPI
 from fastapi import HTTPException
 from fastapi import status
@@ -37,11 +39,10 @@ async def get_curso(curso_id: int):
     
 @app.post('/cursos')
 async def post_curso(curso: Curso):
-    if curso.id not in cursos:
-        cursos[curso.id] = curso
-        return curso
-    else:
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Já existe um curso com ID{curso.id}.")
+    next_id: int = len(cursos) + 1
+    cursos[next_id] = curso
+    del curso.id
+    return curso
 
 
 
