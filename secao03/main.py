@@ -34,6 +34,14 @@ async def get_curso(curso_id: int):
         return curso
     except KeyError:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Curso não encontrado.")
+    
+@app.post('/cursos')
+async def post_curso(curso: Curso):
+    if curso.id not in cursos:
+        cursos[curso.id] = curso
+        return curso
+    else:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=f"Já existe um curso com ID{curso.id}.")
 
 
 
