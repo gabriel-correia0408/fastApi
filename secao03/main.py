@@ -2,6 +2,8 @@ from typing import List, Optional
 
 from fastapi.responses import JSONResponse
 from fastapi import Response
+from fastapi import Path
+from fastapi import Query
 
 from fastapi import FastAPI
 from fastapi import HTTPException
@@ -33,7 +35,10 @@ async def get_cursos():
 
 
 @app.get('/cursos/{curso_id}')
-async def get_curso(curso_id: int):
+async def get_curso(curso_id: int = Path(default=None, 
+                                         title='ID do curso', 
+                                         description='Deve ser entre 1 e 2', 
+                                         gt=0, lt=3)):
     try:
         curso = cursos[curso_id]
         return curso
@@ -65,6 +70,16 @@ async def delete_curso(curso_id: int):
         return Response(status_code=status.HTTP_204_NO_CONTENT)
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Não existe um curso com id {curso_id}')
+
+
+
+@app.get('/calculadora')
+async def calcular(a: int = Query(default=None, gt=5),b: int = Query(default=None, gt=10),c: Optional[int] = None):
+    soma: int = a + b
+    if c:
+        soma = soma + c
+        
+    return {"Resultado": soma}
 
 
 if __name__ == '__main__':
