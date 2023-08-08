@@ -1,0 +1,14 @@
+###PyCharm###
+.idea/
+*.pyc
+
+# dotenv environment variables file
+.env
+env/
+
+# Optional npm cache directory
+.npm
+
+# Dependency directories
+.vs
+__pycache__

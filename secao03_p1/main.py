@@ -46,8 +46,7 @@ async def get_cursos(db: Any = Depends(fake_db)):
 
 
 @app.get('/cursos/{curso_id}')
-async def get_curso(curso_id: int = Path(default=None, 
-                                         title='ID do curso', 
+async def get_curso(curso_id: int = Path(title='ID do curso', 
                                          description='Deve ser entre 1 e 2', 
                                          gt=0, lt=3), db: Any = Depends(fake_db)):
     try:
@@ -57,10 +56,10 @@ async def get_curso(curso_id: int = Path(default=None,
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Curso não encontrado.")
     
 @app.post('/cursos', status_code=status.HTTP_201_CREATED, response_model=Curso)
-async def post_curso(curso: Curso, db: Any = Depends(fake_db)):
+async def post_curso(curso: Curso):
     next_id: int = len(cursos) + 1
-    cursos[next_id] = curso
-    del curso.id
+    curso.id = next_id
+    cursos.append(curso)
     return curso
 
 @app.put('/cursos/{curso_id}')
